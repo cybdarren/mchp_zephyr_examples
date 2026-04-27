@@ -8,18 +8,6 @@ if(DEFINED BOARD)
     list(APPEND DTC_OVERLAY_FILE
       ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/same54_xpro.overlay
     )
-  elseif(BOARD STREQUAL "samd21_iot_wg")
-    list(APPEND DTC_OVERLAY_FILE
-      ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/samd21_iot_wg.overlay
-    )
-  elseif(BOARD STREQUAL "samd21_iot_wg2")
-    list(APPEND DTC_OVERLAY_FILE
-      ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/samd21_iot_wg2.overlay
-    )
-    elseif(BOARD STREQUAL "samd21_xpro_ot")
-    list(APPEND DTC_OVERLAY_FILE
-      ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/samd21_xpro_ot.overlay
-    )
   elseif(BOARD STREQUAL "feather_m4_zephyr_ot")
     list(APPEND DTC_OVERLAY_FILE
       ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/feather_m4_zephyr_ot.overlay
@@ -28,9 +16,11 @@ if(DEFINED BOARD)
 
 endif()
 
-list(APPEND ZEPHYR_EXTRA_MODULES
-  ${CMAKE_CURRENT_LIST_DIR}/modules/ws2812_common
-)
+if(BOARD STREQUAL "feather_m4_zephyr_ot")
+  list(APPEND ZEPHYR_EXTRA_MODULES
+    ${CMAKE_CURRENT_LIST_DIR}/modules/ws2812_common
+  )
+endif()
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 
@@ -41,9 +31,11 @@ target_include_directories(app PRIVATE ${CMAKE_CURRENT_LIST_DIR}/include)
 target_sources(app PRIVATE
     src/main.c
     src/bubble_level.c
-    src/imu_chart.c 
+    src/imu_chart.c
     src/imu_text.c
-    src/img_util.c
 )
 
-target_link_libraries(app PRIVATE ws2812_common)
+if(BOARD STREQUAL "feather_m4_zephyr_ot")
+  target_sources(app PRIVATE src/img_util.c)
+  target_link_libraries(app PRIVATE ws2812_common)
+endif()

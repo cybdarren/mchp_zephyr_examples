@@ -8,18 +8,6 @@ if(DEFINED BOARD)
     list(APPEND DTC_OVERLAY_FILE
       ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/same54_xpro.overlay
     )
-  elseif(BOARD STREQUAL "samd21_iot_wg")
-    list(APPEND DTC_OVERLAY_FILE
-      ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/samd21_iot_wg.overlay
-    )
-  elseif(BOARD STREQUAL "samd21_iot_wg2")
-    list(APPEND DTC_OVERLAY_FILE
-      ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/samd21_iot_wg2.overlay
-    )
-  elseif(BOARD STREQUAL "samd21_xpro_ot")
-    list(APPEND DTC_OVERLAY_FILE
-      ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/samd21_xpro_ot.overlay
-    )
   elseif(BOARD STREQUAL "feather_m4_zephyr_ot")
     list(APPEND DTC_OVERLAY_FILE
       ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/feather_m4_zephyr_ot.overlay
