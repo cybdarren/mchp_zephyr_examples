@@ -35,7 +35,10 @@ target_sources(app PRIVATE
     src/imu_text.c
 )
 
-if(BOARD STREQUAL "feather_m4_zephyr_ot")
+if (CONFIG_USE_IMG_UTIL)
   target_sources(app PRIVATE src/img_util.c)
+endif()
+
+if (CONFIG_WS2812_COMMON)
   target_link_libraries(app PRIVATE ws2812_common)
 endif()

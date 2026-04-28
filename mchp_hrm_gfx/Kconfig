@@ -1,0 +1,9 @@
+source "Kconfig.zephyr"
+
+menu "Application Options"
+
+config USE_IMG_UTIL
+    bool "Enable image utilities"
+    default y
+
+endmenu

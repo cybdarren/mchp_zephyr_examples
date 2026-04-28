@@ -23,7 +23,7 @@
 	};
 };
 
-/* the IMU will be mounted in EXT1
+/* the IMU will be mounted in EXT1 */
 &sercom4 {
     status = "okay";
 
