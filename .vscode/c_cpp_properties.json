@@ -2,7 +2,7 @@
     "configurations": [
         {
             "name": "Zephyr",
-            "compileCommands": "${workspaceFolder}/build_mchp_hw_test/compile_commands.json",
+            "compileCommands": "${workspaceFolder}/build_mchp_6dof_imu/compile_commands.json",
             "intelliSenseMode": "windows-gcc-x64",
             "cppStandard": "c++17",
             "cStandard": "c11"

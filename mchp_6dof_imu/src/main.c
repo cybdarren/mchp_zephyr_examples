@@ -20,6 +20,9 @@
 #include "bubble_level.h"
 #include "imu_chart.h"
 #include "imu_text.h"
+#ifdef CONFIG_WS2812_COMMON
+#include <ws2812_common.h>
+#endif
 
 #define SLEEP_TIME_MS 10  /* Main loop sleep time */
 
@@ -86,6 +89,45 @@ void heartbeat_thread(void)
 K_THREAD_DEFINE(heartbeat_tid, 512, heartbeat_thread, NULL, NULL, NULL,
                 7, 0, 0);
 
+#ifdef CONFIG_WS2812_COMMON
+#define LED_MAX_BRIGHTNESS 48
+#define TILT_5DEG   805   /* ~5 degrees using L1 norm metric */
+#define TILT_30DEG  3660  /* ~30 degrees */
+#define TILT_MAX    10000 /* 90 degrees */
+
+static void update_tilt_leds(struct sensor_value *ax_sv,
+                             struct sensor_value *ay_sv,
+                             struct sensor_value *az_sv)
+{
+    int64_t ax = (int64_t)ax_sv->val1 * 1000000 + ax_sv->val2;
+    int64_t ay = (int64_t)ay_sv->val1 * 1000000 + ay_sv->val2;
+    int64_t az = (int64_t)az_sv->val1 * 1000000 + az_sv->val2;
+
+    int64_t mag = llabs(ax) + llabs(ay) + llabs(az);
+    if (mag == 0) {
+        return;
+    }
+
+    int64_t tilt = (llabs(ax) + llabs(ay)) * 10000 / mag;
+    uint8_t r = 0, g = 0;
+
+    if (tilt < TILT_5DEG) {
+        g = LED_MAX_BRIGHTNESS;
+    } else if (tilt >= TILT_30DEG) {
+        int64_t range = TILT_MAX - TILT_30DEG;
+        int64_t pos = tilt > TILT_MAX ? range : tilt - TILT_30DEG;
+        r = LED_MAX_BRIGHTNESS;
+        g = (uint8_t)((range - pos) * (LED_MAX_BRIGHTNESS / 3) / range);
+    }
+
+    ws2812_set_pixel(0, 0, r, g, 0);
+    ws2812_set_pixel(1, 0, r, g, 0);
+    ws2812_set_pixel(1, 1, r, g, 0);
+    ws2812_update(0);
+    ws2812_update(1);
+}
+#endif
+
 /*
  * LVGL input device read callback for button input.
  * Maps GPIO button state to LVGL touch events.
@@ -140,6 +182,10 @@ int main(void)
     if (device_is_ready(switch1.port)) {
         gpio_pin_interrupt_configure_dt(&switch1, GPIO_INPUT);
     }
+
+#ifdef CONFIG_WS2812_COMMON
+    ws2812_init();
+#endif
 
     /* Configure the IMU device */
     if (imu == NULL) {
@@ -233,6 +279,9 @@ int main(void)
                     update_imu_text(&accel[0], &accel[1], &accel[2]);
                     break;
             }
+#ifdef CONFIG_WS2812_COMMON
+            update_tilt_leds(&accel[0], &accel[1], &accel[2]);
+#endif
             irq_from_sensor = 0;
         }
 

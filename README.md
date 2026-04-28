@@ -34,7 +34,7 @@ west build -p always -b same54_xpro mchp_weather_gfx -d build_mchp_weather_gfx -
 
 ### feather_m4_zephyr_ot
 
-Uses the bossac runner. Adjust `--bossac-port` to match your COM port.
+Uses the bossac runner. Adjust `--bossac-port` to match your COM port. To enter bootloader mode on the feather board you must press the reset button quickly twice.
 
 ```bash
 west flash -r bossac --bossac-port="COM29" -d build_mchp_6dof_imu
