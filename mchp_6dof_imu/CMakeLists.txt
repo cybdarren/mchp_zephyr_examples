@@ -18,7 +18,7 @@ endif()
 
 if(BOARD STREQUAL "feather_m4_zephyr_ot")
   list(APPEND ZEPHYR_EXTRA_MODULES
-    ${CMAKE_CURRENT_LIST_DIR}/modules/ws2812_common
+    ${CMAKE_CURRENT_LIST_DIR}/../mchp_common/modules/ws2812_common
   )
 endif()
 

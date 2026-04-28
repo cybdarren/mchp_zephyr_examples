@@ -16,7 +16,7 @@ if(DEFINED BOARD)
 endif()
 
 list(APPEND ZEPHYR_EXTRA_MODULES
-  ${CMAKE_CURRENT_LIST_DIR}/modules/ws2812_common
+  ${CMAKE_CURRENT_LIST_DIR}/../mchp_common/modules/ws2812_common
 )
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})

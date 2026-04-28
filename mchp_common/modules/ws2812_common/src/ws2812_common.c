@@ -59,9 +59,9 @@ volatile uint32_t *get_outclr(const struct gpio_dt_spec *gpio)
 }
 
 /************************************************************
- * The WS2812 timing is very tight, so we use inline assembly 
+ * The WS2812 timing is very tight, so we use inline assembly
  * to ensure consistent timing regardless of compiler optimizations.
- * This is based upon a CPU running at 120MHz 
+ * This is based upon a CPU running at 120MHz
  ************************************************************/
 #define NOPS(i, _) "nop\n\t"
 #define NOP_N_TIMES(n) LISTIFY(n, NOPS, ())
@@ -76,7 +76,7 @@ __attribute__((always_inline)) static inline void ws2812_send_bit_asm(volatile u
             "str %[mask], [%[outset]] \n\t"   // Set pin high
             NOP_N_TIMES(81)
             "str %[mask], [%[outclr]] \n\t"   // Set pin low
-            NOP_N_TIMES(40) 
+            NOP_N_TIMES(40)
             :
             : [outset]"r"(outset), [outclr]"r"(outclr), [mask]"r"(mask)
             : "memory"
@@ -86,7 +86,7 @@ __attribute__((always_inline)) static inline void ws2812_send_bit_asm(volatile u
             "str %[mask], [%[outset]] \n\t"   // Set pin high
             NOP_N_TIMES(41)
             "str %[mask], [%[outclr]] \n\t"   // Set pin low
-            NOP_N_TIMES(79) 
+            NOP_N_TIMES(79)
             :
             : [outset]"r"(outset), [outclr]"r"(outclr), [mask]"r"(mask)
             : "memory"
@@ -196,7 +196,7 @@ void ws2812_update(int strip_idx)
         ws2812_send_bit_asm(outset, outclr, mask, (g & 0x04) != 0);
         ws2812_send_bit_asm(outset, outclr, mask, (g & 0x02) != 0);
         ws2812_send_bit_asm(outset, outclr, mask, (g & 0x01) != 0);
-  
+
         /* Send Red */
         ws2812_send_bit_asm(outset, outclr, mask, (r & 0x80) != 0);
         ws2812_send_bit_asm(outset, outclr, mask, (r & 0x40) != 0);
@@ -215,7 +215,7 @@ void ws2812_update(int strip_idx)
         ws2812_send_bit_asm(outset, outclr, mask, (b & 0x08) != 0);
         ws2812_send_bit_asm(outset, outclr, mask, (b & 0x04) != 0);
         ws2812_send_bit_asm(outset, outclr, mask, (b & 0x02) != 0);
-        ws2812_send_bit_asm(outset, outclr, mask, (b & 0x01) != 0);        
+        ws2812_send_bit_asm(outset, outclr, mask, (b & 0x01) != 0);
     }
 
     /* Re-enable interrupts */
