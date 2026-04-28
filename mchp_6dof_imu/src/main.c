@@ -196,11 +196,6 @@ int main(void)
     lv_scr_load(bubble_screen);
     bubble_level_init(bubble_screen);
 
-    /* Temporary welcome label */
-    lv_obj_t *label = lv_label_create(lv_screen_active());
-    lv_label_set_text(label, "Hello Zephyr + LVGL!");
-    lv_obj_center(label);
-
     /* Temporary next button */
     lv_obj_t *btn = lv_button_create(lv_screen_active());
     lv_obj_set_size(btn, 80, 40);
@@ -241,21 +236,11 @@ int main(void)
             irq_from_sensor = 0;
         }
 
-        /* Toggle LED */
-        // ret = gpio_pin_toggle_dt(&led);
-        // if (ret < 0) {
-        //     return 0;
-        // }
-
         /* Handle button press to switch screens */
         if (irq_from_button) {
             irq_from_button = 0;
             button_pressed = gpio_pin_get_dt(&switch0) == 1;
             /* Remove welcome UI elements on first press */
-            if (label != NULL) {
-                lv_obj_del(label);
-                label = NULL;
-            }
             if (btn != NULL) {
                 lv_obj_del(btn);
                 btn = NULL;

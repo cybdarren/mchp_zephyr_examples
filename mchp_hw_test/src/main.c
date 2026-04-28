@@ -84,6 +84,26 @@ static void timer_handler(struct k_timer *dummy)
 
 K_TIMER_DEFINE(anim_timer, timer_handler, NULL);
 
+void heartbeat_thread(void)
+{
+    while (1) {
+        gpio_pin_set_dt(&led, 1);
+        k_msleep(100);
+
+        gpio_pin_set_dt(&led, 0);
+        k_msleep(100);
+
+        gpio_pin_set_dt(&led, 1);
+        k_msleep(100);
+
+        gpio_pin_set_dt(&led, 0);
+        k_msleep(700);
+    }
+}
+
+K_THREAD_DEFINE(heartbeat_tid, 512, heartbeat_thread, NULL, NULL, NULL,
+                7, 0, 0);
+
 static void button_input_cb(struct input_event *evt, void *user_data)
 {
     if (evt->sync == 0) {
@@ -181,8 +201,6 @@ int main(void)
 
     /* Main application loop */
     while (1) {
-        ret = gpio_pin_toggle_dt(&led);
-
         if (switch0_event) {
             lv_obj_set_style_bg_color(lv_screen_active(), lv_color_white(), LV_PART_MAIN);
             lv_refr_now(NULL);  // Force immediate refresh to show white background before loading image

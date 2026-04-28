@@ -23,22 +23,7 @@
 	};
 };
 
-/*************************************************************
-                Mikroe socket connections for 
-                Adafruit EyeSPI display
-
-       1  NC                    16  BACKLIGHT   PB08
-       2  TFT_RST   PA06        15  TFT_DC      PB07
-       3  TFT_CS    PB28        14  CARD_CS     PA05
-       4  SCK       PB26        13  NC
-       5  MISO      PB29        12  NC
-       6  MOSI      PB27        11  NC
-       7  +3V3                  10  +5V  
-       8  GND                   9   GND
-
- *************************************************************/
-
-/* This assumes that the display will be mounted in the XPro socket EXT1 and using sercom4 */
+/* the IMU will be mounted in EXT1
 &sercom4 {
     status = "okay";
 
@@ -68,6 +53,22 @@
 
 };
 
+
+/*************************************************************
+                Mikroe socket connections for 
+                Adafruit EyeSPI display (check these!)
+
+       1  NC                    16  BACKLIGHT   PB08
+       2  TFT_RST   PB01        15  TFT_DC      PD00
+       3  TFT_CS    PC06        14  CARD_CS     PA05
+       4  SCK       PC05        13  NC
+       5  MISO      PC04        12  NC
+       6  MOSI      PC07        11  NC
+       7  +3V3                  10  +5V  
+       8  GND                   9   GND
+
+ *************************************************************/
+/* This assumes that the display will be mounted in the XPro socket EXT2 and using sercom6 */
 &sercom6 {
     status = "okay";
     compatible = "atmel,sam0-spi";
