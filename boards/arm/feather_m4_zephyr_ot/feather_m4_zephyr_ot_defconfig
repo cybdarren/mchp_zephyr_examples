@@ -53,6 +53,9 @@ CONFIG_FS_LOG_LEVEL_DBG=y
 # This is to enable our custom driver
 CONFIG_WS2812_COMMON=y
 
+# Enable the image util
+CONFIG_USE_IMG_UTIL=y
+
 # set log level 2 to reduce log output (warning and errors)
 CONFIG_LOG=y
 CONFIG_LOG_DEFAULT_LEVEL=2
