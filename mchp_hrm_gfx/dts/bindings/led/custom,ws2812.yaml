@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: Apache-2.0
+description: "WS2812 LED strip"
+compatible: "custom,ws2812"
+properties:
+  gpios:
+    type: phandle-array
+    required: true
+    description: "GPIO pin driving the LED data line"
+  num_leds:
+    type: int
+    required: true
+    description: "Number of LEDs on this strip"

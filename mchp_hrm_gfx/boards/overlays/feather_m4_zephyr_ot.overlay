@@ -1,0 +1,18 @@
+/{
+    aliases {
+        afe4404sensor = &afe4404;
+    };
+};
+
+&sercom2 {
+    status = "okay";
+
+    afe4404: afe4404@58 {
+        status = "okay";
+        compatible = "ti,afe4404";
+        reg = <0x58>;
+
+        int-gpios = <&porta 4 GPIO_ACTIVE_HIGH>;
+        rst-gpios = <&portb 8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+    };
+};

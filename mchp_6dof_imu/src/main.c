@@ -20,7 +20,7 @@
 #include "bubble_level.h"
 #include "imu_chart.h"
 #include "imu_text.h"
-#ifdef CONFIG_WS2812_COMMON
+#ifdef CONFIG_USE_WS2812
 #include <ws2812_common.h>
 #endif
 
@@ -89,8 +89,8 @@ void heartbeat_thread(void)
 K_THREAD_DEFINE(heartbeat_tid, 512, heartbeat_thread, NULL, NULL, NULL,
                 7, 0, 0);
 
-#ifdef CONFIG_WS2812_COMMON
-#define LED_MAX_BRIGHTNESS 48
+#ifdef CONFIG_USE_WS2812
+#define LED_MAX_BRIGHTNESS 24
 #define TILT_5DEG   805   /* ~5 degrees using L1 norm metric */
 #define TILT_30DEG  3660  /* ~30 degrees */
 #define TILT_MAX    10000 /* 90 degrees */
@@ -183,7 +183,7 @@ int main(void)
         gpio_pin_interrupt_configure_dt(&switch1, GPIO_INPUT);
     }
 
-#ifdef CONFIG_WS2812_COMMON
+#ifdef CONFIG_USE_WS2812
     ws2812_init();
 #endif
 
@@ -279,7 +279,7 @@ int main(void)
                     update_imu_text(&accel[0], &accel[1], &accel[2]);
                     break;
             }
-#ifdef CONFIG_WS2812_COMMON
+#ifdef CONFIG_USE_WS2812
             update_tilt_leds(&accel[0], &accel[1], &accel[2]);
 #endif
             irq_from_sensor = 0;

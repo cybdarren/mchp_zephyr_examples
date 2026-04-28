@@ -21,6 +21,9 @@
 #include "afe4404.h"
 #include "hrm_text.h"
 #include "hrm_chart.h"
+#ifdef CONFIG_USE_WS2812
+#include <ws2812_common.h>
+#endif
 
 #define SLEEP_TIME_MS 10  /* Main loop sleep time */
 
@@ -232,6 +235,10 @@ int main(void)
     if (device_is_ready(switch1.port)) {
         gpio_pin_interrupt_configure_dt(&switch1, GPIO_INPUT);
     }
+
+#ifdef CONFIG_USE_WS2812
+    ws2812_init();
+#endif
 
     if (!device_is_ready(hrm_dev)) {
         printk("AFE4404 device not ready\n");

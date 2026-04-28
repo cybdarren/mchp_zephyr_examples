@@ -1,0 +1,4 @@
+name: ws2812_common
+build:
+  cmake: .
+  kconfig: Kconfig

@@ -39,6 +39,6 @@ if (CONFIG_USE_IMG_UTIL)
   target_sources(app PRIVATE src/img_util.c)
 endif()
 
-if (CONFIG_WS2812_COMMON)
+if (CONFIG_USE_WS2812)
   target_link_libraries(app PRIVATE ws2812_common)
 endif()

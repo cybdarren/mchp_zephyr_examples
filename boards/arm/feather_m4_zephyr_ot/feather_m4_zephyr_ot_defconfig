@@ -51,7 +51,7 @@ CONFIG_FAT_FILESYSTEM_ELM=y
 CONFIG_FS_LOG_LEVEL_DBG=y
 
 # This is to enable our custom driver
-CONFIG_WS2812_COMMON=y
+CONFIG_USE_WS2812=y
 
 # Enable the image util
 CONFIG_USE_IMG_UTIL=y
