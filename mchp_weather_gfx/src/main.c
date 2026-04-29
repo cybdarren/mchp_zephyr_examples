@@ -17,7 +17,9 @@
 #include <soc.h>
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef CONFIG_USE_WS2812
 #include <ws2812_common.h>
+#endif
 #include "bme280_text.h"
 #include "bme280_chart.h"
 
@@ -154,6 +156,10 @@ int main(void)
     if (device_is_ready(switch1.port)) {
         gpio_pin_interrupt_configure_dt(&switch1, GPIO_INPUT);
     }
+
+#ifdef CONFIG_USE_WS2812
+    ws2812_init();
+#endif
 
     /* Configure the BME280 device */
     if (bme280 == NULL) {
