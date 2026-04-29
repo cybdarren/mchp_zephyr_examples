@@ -22,6 +22,9 @@
 #include "range_text.h"
 #include "range_chart.h"
 #include "range_dial.h"
+#ifdef CONFIG_USE_WS2812
+#include <ws2812_common.h>
+#endif
 
 #define SLEEP_TIME_MS 100  /* Main loop sleep time */
 
@@ -119,6 +122,10 @@ int main(void)
     if (device_is_ready(switch1.port)) {
         gpio_pin_interrupt_configure_dt(&switch1, GPIO_INPUT);
     }
+
+#ifdef CONFIG_USE_WS2812
+    ws2812_init();
+#endif
 
     if (!device_is_ready(vl6180_dev)) {
         printk("VL6180X device not ready\n");

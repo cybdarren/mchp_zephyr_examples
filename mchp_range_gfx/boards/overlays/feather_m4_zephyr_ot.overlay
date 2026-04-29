@@ -1,0 +1,19 @@
+/{
+    aliases {
+        vl6180xsensor = &vl6180x;
+    };
+};
+
+&sercom2 {
+    status = "okay";
+
+    vl6180x: vl6180x@29 {
+        status = "okay";
+        compatible = "st,vl6180x";
+        reg = <0x29>;
+
+        int-gpios = <&porta 4 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+        en-gpios = <&porta 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
+        continuous-mode;
+    };
+};

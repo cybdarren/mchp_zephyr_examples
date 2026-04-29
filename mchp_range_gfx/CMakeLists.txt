@@ -8,8 +8,17 @@ if(DEFINED BOARD)
     list(APPEND DTC_OVERLAY_FILE
       ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/same54_xpro.overlay
     )
+  elseif(BOARD STREQUAL "feather_m4_zephyr_ot")
+    list(APPEND DTC_OVERLAY_FILE
+      ${CMAKE_CURRENT_SOURCE_DIR}/boards/overlays/feather_m4_zephyr_ot.overlay
+    )
   endif()
+endif()
 
+if(BOARD STREQUAL "feather_m4_zephyr_ot")
+  list(APPEND ZEPHYR_EXTRA_MODULES
+    ${CMAKE_CURRENT_LIST_DIR}/../mchp_common/modules/ws2812_common
+  )
 endif()
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
@@ -25,3 +34,7 @@ target_sources(app PRIVATE
     src/range_dial.c
     src/vl6180x.c
 )
+
+if (CONFIG_USE_WS2812)
+  target_link_libraries(app PRIVATE ws2812_common)
+endif()
