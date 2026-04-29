@@ -112,7 +112,7 @@ static void update_tilt_leds(struct sensor_value *ax_sv,
     uint8_t r = 0, g = 0;
 
     if (tilt < TILT_5DEG) {
-        g = LED_MAX_BRIGHTNESS;
+        g = 2 + (uint8_t)((TILT_5DEG - tilt) * (LED_MAX_BRIGHTNESS - 2) / TILT_5DEG);
     } else if (tilt >= TILT_30DEG) {
         int64_t range = TILT_MAX - TILT_30DEG;
         int64_t pos = tilt > TILT_MAX ? range : tilt - TILT_30DEG;
