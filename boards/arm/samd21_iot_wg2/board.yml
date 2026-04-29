@@ -1,6 +1,0 @@
-board:
-  name: samd21_iot_wg2
-  full_name: SAM D21 IoT WG2
-  vendor: atmel
-  socs:
-    - name: samd21g18a
