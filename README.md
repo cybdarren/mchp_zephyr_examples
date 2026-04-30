@@ -1,5 +1,6 @@
 # SAM-IOT-ML Zephyr Project
 
+![Handheld](./docs/1cfa1e0b-0786-425f-953e-64b1ecdf0340.jpg)
 ## Prerequisites
 
 All build commands require the `BOARD_ROOT` parameter to point to this project directory:
