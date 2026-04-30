@@ -1,0 +1,7 @@
+menu "MCHP Serial Protocol"
+
+config USE_MCHP_SERIAL
+    bool "MCHP serial measurement protocol"
+    default y
+
+endmenu

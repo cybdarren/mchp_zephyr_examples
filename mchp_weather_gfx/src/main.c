@@ -20,6 +20,9 @@
 #ifdef CONFIG_USE_WS2812
 #include <ws2812_common.h>
 #endif
+#ifdef CONFIG_USE_MCHP_SERIAL
+#include <mchp_serial.h>
+#endif
 #include "bme280_text.h"
 #include "bme280_chart.h"
 
@@ -253,6 +256,14 @@ int main(void)
         }
 
         if (k_msgq_get(&bme_msgq, &data, K_NO_WAIT) == 0) {
+#ifdef CONFIG_USE_MCHP_SERIAL
+            float wx_vals[3] = {
+                sensor_value_to_float(&data[0]),
+                sensor_value_to_float(&data[1]),
+                sensor_value_to_float(&data[2])
+            };
+            mchp_serial_send("WX", wx_vals, 3);
+#endif
             if (current_screen == SCREEN_TEXT) {
                 update_bme280_text(&data[0], &data[1], &data[2]);
             } else {

@@ -25,6 +25,9 @@
 #ifdef CONFIG_USE_WS2812
 #include <ws2812_common.h>
 #endif
+#ifdef CONFIG_USE_MCHP_SERIAL
+#include <mchp_serial.h>
+#endif
 
 #define SLEEP_TIME_MS 100  /* Main loop sleep time */
 
@@ -203,6 +206,10 @@ int main(void)
 
         if (sensor_sample_fetch(vl6180_dev) == 0) {
             sensor_channel_get(vl6180_dev, SENSOR_CHAN_DISTANCE, &val);
+#ifdef CONFIG_USE_MCHP_SERIAL
+            float rng_val = sensor_value_to_float(&val);
+            mchp_serial_send("RNG", &rng_val, 1);
+#endif
             switch(current_screen) {
                 case SCREEN_TEXT:
                     update_range_text(&val);

@@ -24,6 +24,9 @@
 #ifdef CONFIG_USE_WS2812
 #include <ws2812_common.h>
 #endif
+#ifdef CONFIG_USE_MCHP_SERIAL
+#include <mchp_serial.h>
+#endif
 
 #define SLEEP_TIME_MS 10  /* Main loop sleep time */
 
@@ -314,6 +317,11 @@ int main(void)
             sensor_channel_get(hrm_dev, SENSOR_CHAN_AFE4404_ALED1, &aled1);
 
             process_ppg(led1.val1, aled1.val1, &bpm);
+
+#ifdef CONFIG_USE_MCHP_SERIAL
+            float vals[2] = { (float)bpm, lp_out };
+            mchp_serial_send("HRM", vals, 2);
+#endif
 
             switch(current_screen) {
                 case SCREEN_TEXT:

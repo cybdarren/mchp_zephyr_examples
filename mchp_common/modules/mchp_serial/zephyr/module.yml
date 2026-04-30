@@ -1,0 +1,4 @@
+name: mchp_serial
+build:
+  cmake: .
+  kconfig: Kconfig

@@ -23,6 +23,9 @@
 #ifdef CONFIG_USE_WS2812
 #include <ws2812_common.h>
 #endif
+#ifdef CONFIG_USE_MCHP_SERIAL
+#include <mchp_serial.h>
+#endif
 
 #define SLEEP_TIME_MS 10  /* Main loop sleep time */
 
@@ -281,6 +284,14 @@ int main(void)
             }
 #ifdef CONFIG_USE_WS2812
             update_tilt_leds(&accel[0], &accel[1], &accel[2]);
+#endif
+#ifdef CONFIG_USE_MCHP_SERIAL
+            float vals[3] = {
+                sensor_value_to_float(&accel[0]),
+                sensor_value_to_float(&accel[1]),
+                sensor_value_to_float(&accel[2])
+            };
+            mchp_serial_send("IMU", vals, 3);
 #endif
             irq_from_sensor = 0;
         }
