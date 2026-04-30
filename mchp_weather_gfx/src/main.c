@@ -227,12 +227,6 @@ int main(void)
 
     /* Main application loop */
     while (1) {
-        /* Toggle LED */
-        // ret = gpio_pin_toggle_dt(&led);
-        // if (ret < 0) {
-        //     return 0;
-        // }
-
         /* Handle button press to switch screens */
         if (irq_from_button) {
             irq_from_button = 0;

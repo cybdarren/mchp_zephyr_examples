@@ -282,12 +282,6 @@ int main(void)
 
     /* Main application loop */
     while (1) {
-        /* Toggle LED */
-        // ret = gpio_pin_toggle_dt(&led);
-        // if (ret < 0) {
-        //     return 0;
-        // }
-
         /* Handle button press to switch screens */
         if (irq_from_button) {            
             irq_from_button = 0;
@@ -315,7 +309,6 @@ int main(void)
         }
 
         if (sensor_sample_fetch(hrm_dev) == 0) {
-            // gpio_pin_toggle_dt(&led);  /* Toggle LED on each sample for visual heartbeat */
             /* Read only the channels needed for PPG */
             sensor_channel_get(hrm_dev, SENSOR_CHAN_AFE4404_LED1, &led1);
             sensor_channel_get(hrm_dev, SENSOR_CHAN_AFE4404_ALED1, &aled1);
