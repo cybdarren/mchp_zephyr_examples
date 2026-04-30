@@ -2,7 +2,8 @@
 """
 MCHP GUI — live sensor display for Microchip Zephyr applications.
 
-Auto-detects the application type (IMU, HRM, Range, Weather) from the
+Displays up to 4 devices simultaneously in a 2x2 grid. Each panel
+auto-detects the application type (IMU, HRM, Range, Weather) from the
 $MCHP serial protocol and shows numeric values plus a scrolling chart.
 """
 
@@ -13,57 +14,59 @@ import queue
 from serial_parser import SerialReader, list_serial_ports
 from app_views import VIEW_MAP
 
-POLL_MS = 50
+POLL_MS = 20
+NUM_PANELS = 4
 
 
-class MchpGui:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("MCHP Sensor GUI")
-        self.root.geometry("700x500")
-        self.root.minsize(500, 400)
-
+class DevicePanel:
+    def __init__(self, parent, panel_id):
+        self.panel_id = panel_id
         self.reader = None
         self.view = None
         self.detected_tag = None
 
-        self._build_toolbar()
-        self._build_status()
+        self.frame = tk.LabelFrame(parent, text=f"Device {panel_id + 1}", padx=4, pady=4)
 
-        self.view_frame = tk.Frame(self.root)
+        self._build_toolbar()
+
+        self.view_frame = tk.Frame(self.frame)
         self.view_frame.pack(fill=tk.BOTH, expand=True)
 
-        self._show_placeholder("Select a COM port and click Connect")
-
-    def _build_toolbar(self):
-        bar = tk.Frame(self.root)
-        bar.pack(fill=tk.X, padx=5, pady=5)
-
-        tk.Label(bar, text="Port:").pack(side=tk.LEFT)
-        self.port_var = tk.StringVar()
-        self.port_combo = ttk.Combobox(
-            bar, textvariable=self.port_var, width=12, state="readonly"
-        )
-        self.port_combo.pack(side=tk.LEFT, padx=4)
-
-        self.refresh_btn = tk.Button(bar, text="Refresh", command=self._refresh_ports)
-        self.refresh_btn.pack(side=tk.LEFT, padx=2)
-
-        self.connect_btn = tk.Button(bar, text="Connect", command=self._toggle_connect)
-        self.connect_btn.pack(side=tk.LEFT, padx=4)
-
-        self._refresh_ports()
-
-    def _build_status(self):
         self.status_var = tk.StringVar(value="Disconnected")
-        status = tk.Label(
-            self.root,
+        tk.Label(
+            self.frame,
             textvariable=self.status_var,
             anchor="w",
             relief=tk.SUNKEN,
-            padx=5,
+            font=("Consolas", 9),
+            padx=3,
+        ).pack(fill=tk.X, side=tk.BOTTOM)
+
+        self._show_placeholder("Not connected")
+
+    def _build_toolbar(self):
+        bar = tk.Frame(self.frame)
+        bar.pack(fill=tk.X, pady=(0, 4))
+
+        tk.Label(bar, text="Port:", font=("Consolas", 9)).pack(side=tk.LEFT)
+        self.port_var = tk.StringVar()
+        self.port_combo = ttk.Combobox(
+            bar, textvariable=self.port_var, width=10, state="readonly",
+            font=("Consolas", 9)
         )
-        status.pack(fill=tk.X, side=tk.BOTTOM)
+        self.port_combo.pack(side=tk.LEFT, padx=2)
+
+        self.refresh_btn = tk.Button(
+            bar, text="Refresh", command=self._refresh_ports, font=("Consolas", 8)
+        )
+        self.refresh_btn.pack(side=tk.LEFT, padx=1)
+
+        self.connect_btn = tk.Button(
+            bar, text="Connect", command=self._toggle_connect, font=("Consolas", 8)
+        )
+        self.connect_btn.pack(side=tk.LEFT, padx=2)
+
+        self._refresh_ports()
 
     def _refresh_ports(self):
         ports = list_serial_ports()
@@ -97,7 +100,6 @@ class MchpGui:
         self._clear_view()
         self._show_placeholder("Waiting for data...")
         self.status_var.set(f"Connected to {port}")
-        self._poll()
 
     def _disconnect(self):
         if self.reader:
@@ -109,7 +111,7 @@ class MchpGui:
         self.refresh_btn.config(state="normal")
         self.status_var.set("Disconnected")
         self._clear_view()
-        self._show_placeholder("Select a COM port and click Connect")
+        self._show_placeholder("Not connected")
 
     def _clear_view(self):
         if self.view:
@@ -121,10 +123,10 @@ class MchpGui:
 
     def _show_placeholder(self, text):
         tk.Label(
-            self.view_frame, text=text, font=("Consolas", 14), fg="gray"
+            self.view_frame, text=text, font=("Consolas", 11), fg="gray"
         ).pack(expand=True)
 
-    def _poll(self):
+    def poll(self):
         if not self.reader:
             return
 
@@ -142,13 +144,39 @@ class MchpGui:
                     w.destroy()
                 app_name, view_cls = VIEW_MAP[tag]
                 self.view = view_cls(self.view_frame)
+                self.frame.config(text=f"Device {self.panel_id + 1} — {app_name}")
                 self.status_var.set(
-                    f"Connected to {self.port_var.get()} — {app_name}"
+                    f"{self.port_var.get()} — {app_name}"
                 )
 
             if tag == self.detected_tag and self.view:
                 self.view.update(values)
 
+
+class MchpGui:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("MCHP Sensor GUI")
+        self.root.geometry("1200x800")
+        self.root.minsize(800, 600)
+
+        self.root.columnconfigure(0, weight=1)
+        self.root.columnconfigure(1, weight=1)
+        self.root.rowconfigure(0, weight=1)
+        self.root.rowconfigure(1, weight=1)
+
+        self.panels = []
+        for i in range(NUM_PANELS):
+            row, col = divmod(i, 2)
+            panel = DevicePanel(self.root, i)
+            panel.frame.grid(row=row, column=col, sticky="nsew", padx=4, pady=4)
+            self.panels.append(panel)
+
+        self._poll()
+
+    def _poll(self):
+        for panel in self.panels:
+            panel.poll()
         self.root.after(POLL_MS, self._poll)
 
 
