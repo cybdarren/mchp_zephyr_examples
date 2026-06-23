@@ -1,0 +1,19 @@
+manifest:
+  remotes:
+    - name: zephyrproject
+      url-base: https://github.com/zephyrproject-rtos
+
+  projects:
+    - name: zephyr
+      remote: zephyrproject
+      revision: v4.3.0
+      import:
+        name-allowlist:
+          - cmsis
+          - hal_atmel
+          - lvgl
+          - fatfs
+          - picolibc
+
+  self:
+    path: sam-iot-ml

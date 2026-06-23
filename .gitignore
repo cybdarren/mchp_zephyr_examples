@@ -32,14 +32,14 @@ zephyr_settings.txt
 __pycache__/
 
 # ======================================
-# Zephyr SDK / external tools
+# Zephyr SDK / external tools (managed by west)
 # ======================================
 /zephyr-sdk
 *.swp
 /bootloader
 /modules
-/tools 
-/zephyr 
+/tools
+/zephyr
 
 # ======================================
 # VS Code

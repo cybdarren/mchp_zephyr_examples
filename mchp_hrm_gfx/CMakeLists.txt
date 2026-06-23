@@ -23,6 +23,7 @@ endif()
 
 list(APPEND ZEPHYR_EXTRA_MODULES
   ${CMAKE_CURRENT_LIST_DIR}/../mchp_common/modules/mchp_serial
+  ${CMAKE_CURRENT_LIST_DIR}/../mchp_common/modules/board_root
 )
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})

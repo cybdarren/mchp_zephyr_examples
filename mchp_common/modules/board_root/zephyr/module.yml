@@ -1,0 +1,4 @@
+name: board_root
+build:
+  settings:
+    board_root: ../../..
