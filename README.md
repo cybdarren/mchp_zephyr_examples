@@ -25,14 +25,14 @@ mkdir my_project
 cd my_project
 
 # Clone this repo manually (avoids the west init -m PermissionError on Windows)
-git clone https://github.com/cybdarren/mchp_zephyr_examples.git sam-iot-ml
+git clone https://github.com/cybdarren/mchp_zephyr_examples.git
 
 # Initialise the west workspace from the local clone, then fetch Zephyr modules
-west init -l sam-iot-ml
+west init -l mchp_zephyr_examples
 west update
 
 # Build an application (example: 6-DOF IMU on Feather M4)
-cd sam-iot-ml
+cd mchp_zephyr_examples
 west build -p always -b feather_m4_zephyr_ot mchp_6dof_imu -d build_mchp_6dof_imu
 ```
 
@@ -106,7 +106,7 @@ and displays the appropriate view.
 ## Project Structure
 
 ```
-sam-iot-ml/
+mchp_zephyr_examples/
 ├── west.yml                    # West manifest (minimal module set)
 ├── boards/arm/feather_m4_zephyr_ot/  # Custom board definition
 ├── mchp_common/modules/        # Shared Zephyr extra modules

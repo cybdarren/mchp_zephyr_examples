@@ -17,4 +17,4 @@ manifest:
           - picolibc
 
   self:
-    path: sam-iot-ml
+    path: mchp_zephyr_examples
