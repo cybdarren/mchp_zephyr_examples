@@ -8,28 +8,30 @@ weather station — each with an LVGL graphical display and serial data output.
 
 ## Prerequisites
 
-- [Zephyr SDK](https://docs.zephyrproject.org/latest/develop/toolchains/zephyr_sdk.html) (ARM toolchain)
+- [Zephyr SDK 0.17.4](https://docs.zephyrproject.org/latest/develop/toolchains/zephyr_sdk.html) (ARM toolchain)
 - Python 3.10+ with `west` installed: `pip install west`
 - CMake 3.20+
+- `pyelftools` installed for your system Python: `pip install pyelftools`
 
 ## Getting Started (Fresh Clone)
 
 ```bash
-# Clone this repository
-git clone <repo-url> sam-iot-ml
+# Create a blank directory and initialise the west workspace
+mkdir my_project
+cd my_project
+west init -m https://github.com/cybdarren/mchp_zephyr_examples.git --mr main .
 
-# Initialize west workspace (pulls only required Zephyr modules)
-west init -l sam-iot-ml
+# Fetch all required Zephyr modules
 west update
 
-# Activate your Zephyr SDK environment, then build:
+# Build an application (example: 6-DOF IMU on Feather M4)
 cd sam-iot-ml
 west build -p always -b feather_m4_zephyr_ot mchp_6dof_imu -d build_mchp_6dof_imu
 ```
 
 The custom `west.yml` manifest imports only the modules needed by these
-applications (hal_atmel, cmsis, lvgl, fatfs, picolibc) rather than the full
-Zephyr module set.
+applications (hal_atmel, cmsis, cmsis_6, lvgl, fatfs, picolibc) rather than
+the full Zephyr module set.
 
 ## Build Commands
 
