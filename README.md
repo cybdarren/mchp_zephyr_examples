@@ -15,13 +15,20 @@ weather station — each with an LVGL graphical display and serial data output.
 
 ## Getting Started (Fresh Clone)
 
+> **Windows note:** Use the two-step approach below (`git clone` then `west init -l`)
+> rather than `west init -m`. Windows Defender holds locks on newly cloned git
+> pack files, which causes `west init -m` to fail with a PermissionError.
+
 ```bash
-# Create a blank directory and initialise the west workspace
+# Create a blank directory for the west workspace
 mkdir my_project
 cd my_project
-west init -m https://github.com/cybdarren/mchp_zephyr_examples.git --mr main .
 
-# Fetch all required Zephyr modules
+# Clone this repo manually (avoids the west init -m PermissionError on Windows)
+git clone https://github.com/cybdarren/mchp_zephyr_examples.git sam-iot-ml
+
+# Initialise the west workspace from the local clone, then fetch Zephyr modules
+west init -l sam-iot-ml
 west update
 
 # Build an application (example: 6-DOF IMU on Feather M4)
